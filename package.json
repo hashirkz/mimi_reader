@@ -1,0 +1,20 @@
+{
+  "name": "mimi_reader",
+  "version": "0.1.0",
+  "description": "desktop manga reader developed in electron.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hashirkz/mimi_reader.git"
+  },
+  "keywords": [],
+  "author": "hashir",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hashirkz/mimi_reader/issues"
+  },
+  "homepage": "https://github.com/hashirkz/mimi_reader#readme"
+}
