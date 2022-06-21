@@ -1,26 +1,34 @@
 // electron.js main file to run the event loop
 
 
-const {app, BrowserWindow} = require('electron');
+const electron = require('electron');
 const path = require('path');
 const url = require('url');
 
 let load_main_window = () => {
-    const main_window = new BrowserWindow({
-        width: 1200,
-        height: 800,
+    const main_window = new electron.BrowserWindow({
+        show: false,
         webPreferences: {
             nodeIntegration: true
         }
     });
 
-    main_window.loadURL(url.format({
-        pathname: path.join(__dirname, 'main_window.html'),
-        protocl: 'file:',
-        slashes: true
-    }));
+    // make the main window *fullscreen windowed*
+    main_window.maximize();
+    main_window.show();
+
+    const main_menu_template = [
+        {label: 'file'},
+        // {label: 'bookmarked'},
+        // {label: 'history'},
+        // {label: 'settings'},
+    ];
+    
+    const main_menu = electron.Menu.buildFromTemplate(main_menu_template);
+    electron.Menu.setApplicationMenu(main_menu);
+
+    main_window.loadURL(path.join(__dirname, 'main_window.html'));
 
 };
 
-app.on('ready', load_main_window);
-
+electron.app.on('ready', load_main_window);
