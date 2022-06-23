@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/hashirkz/mimi_reader#readme",
   "dependencies": {
-    "electron": "^19.0.5"
+    "electron": "^19.0.5",
+    "node-fetch": "^3.2.6"
   }
 }
