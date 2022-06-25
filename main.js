@@ -4,6 +4,8 @@
 const electron = require('electron');
 const path = require('path');
 const url = require('url');
+const scrapers = require('./manga_webscrapers/scraper.js');
+
 
 let load_main_window = () => {
     const main_window = new electron.BrowserWindow({
