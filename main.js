@@ -1,6 +1,7 @@
 // electron.js main file to run the event loop
 
 
+const { createPublicKey } = require('crypto');
 const electron = require('electron');
 const path = require('path');
 const url = require('url');
@@ -20,7 +21,12 @@ let load_main_window = () => {
     main_window.show();
 
     const main_menu_template = [
-        {label: 'file'},
+        {
+            label: 'devtools',
+            click: () => {
+                main_window.getFocusedWindow().toggleDevTools();
+            }
+        },
         // {label: 'bookmarked'},
         // {label: 'history'},
         // {label: 'settings'},

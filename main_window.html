@@ -5,12 +5,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>mimi reader</title>
+    <link rel="stylesheet" href="./styles.css">
+    <script src="./utils/search_results.js"></script>
 </head>
 
 <body>
-    <div class = 'search-wrapper'>
-        <input type="search" id="search"> 
+    <div class='search-wrapper'>
+        <form class="search-bar">
+            <input id="search" type="search" placeholder="search...">
+            <div id="search-results">
+                <ul></ul>
+            </div> 
+        </form>
     </div>
+    <script src="utils/search_results.js"></script>
 </body>
 
 </html>
