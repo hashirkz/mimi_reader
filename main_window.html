@@ -7,14 +7,17 @@
     <title>mimi reader</title>
     <link rel="stylesheet" href="./styles.css">
     <script>
-        const electron = require('electron');
-        const search_res = document.getElementById('search');
-        search_res.addEventListener('submit', submit_form);
+        window.onload = function() {
+            const { ipcRenderer } = require('electron');
+            const search_res = document.querySelector('.search-bar');
+            search_res.addEventListener('submit', submit_form);
 
-        function submit_form(elm) {
-            elm.preventDefault();
-            const search_key = document.getElementById('search').innerHTML;
-            electron.ipcRenderer.send('search_key', search_key);
+            function submit_form(event) {
+                event.preventDefault();
+                const search_key = search_res.querySelector('#search').value;
+                search_res.reset();
+                ipcRenderer.send('search_key', search_key);
+            }
         }
     </script>
 </head>
@@ -23,10 +26,6 @@
     <div class='search-wrapper'>
         <form class="search-bar">
             <input id="search" type="search" placeholder="search..." spellcheck="false">
-            <!-- trying to make a dropdown search result thing which would update as the user types -->
-            <!-- <div id="search-results">
-                <ul></ul>
-            </div>  -->
         </form>
     </div>
 

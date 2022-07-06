@@ -30,17 +30,18 @@ let load_window = (html_page) => {
     const window = new electron.BrowserWindow({
         show: false,
         frame: false,
-        width: 1200,
-        height: 600,
+        width: 1250,
+        height: 700,
         webPreferences: {
-            nodeIntegration: true
+            nodeIntegration: true,
+            contextIsolation: false,
         }
     });
 
     // maximize then unhide then load the specified html page *relative path*
     // window.maximize();
-    window.show();
     window.loadURL(path.join(__dirname, html_page));
+    window.show();
 
     return window;
 };
@@ -57,14 +58,10 @@ let swap_window = (window, html_page) => {
 
 // helper function to load the home window on ready
 let load_home = () => {
-    const main_window = load_window('main_window.html');
+    let main_window = load_window('main_window.html');
     
     const main_menu = electron.Menu.buildFromTemplate(main_menu_template);
     electron.Menu.setApplicationMenu(main_menu);
-
-    // closes entire application if main_window is closed
-    main_window.on('closed', () => electron.app.quit());
-
 
     // catching the search_key/data once its submitted from the search form
     electron.ipcMain.on('search_key', async (event, data) => {
@@ -72,11 +69,14 @@ let load_home = () => {
         await manganelo_scraper.search(data);
         await manganelo_scraper.close_browser();
 
-        main_window = swap_window(main_window, path.join(__dirname, 'result_window.html'));
+        main_window = swap_window(main_window, 'result_window.html');
 
-        console.log(data);
         console.log(manganelo_scraper._results);
+        console.log(data);
     });
+
+    // closes entire application if main_window is closed
+    main_window.on('closed', () => electron.app.quit());
 };
 
 electron.app.on('ready', load_home);
