@@ -4,7 +4,8 @@
   "description": "desktop manga reader developed in electron.js",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "bundle": "browserify main.js -o bundle.js"
   },
   "repository": {
     "type": "git",
@@ -18,9 +19,13 @@
   },
   "homepage": "https://github.com/hashirkz/mimi_reader#readme",
   "dependencies": {
-    "electron": "^19.0.6",
     "fetch": "^1.1.0",
     "node-fetch": "^3.2.6",
     "puppeteer": "^14.4.1"
+  },
+  "devDependencies": {
+    "animejs": "^3.2.1",
+    "browserify": "^17.0.0",
+    "electron": "^19.0.7"
   }
 }

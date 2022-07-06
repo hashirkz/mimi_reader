@@ -1,7 +1,6 @@
 // module/api for searching and scraping chapters/links from popular manga websites / databases
 
 const puppeteer = require('puppeteer');
-const fs = require('fs/promises');
 const DEBUG = false;
 
 /*

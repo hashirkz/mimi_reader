@@ -1,42 +1,83 @@
 // electron.js main file to run the event loop
 
 
-const { createPublicKey } = require('crypto');
 const electron = require('electron');
 const path = require('path');
 const url = require('url');
 const scrapers = require('./manga_webscrapers/scraper.js');
 
 
-let load_main_window = () => {
-    const main_window = new electron.BrowserWindow({
+// main menu template/hotbar 
+const main_menu_template = [
+    {
+        label: 'devtools',
+        accelerator: 'Ctrl+I',
+        click: (item, focused_window) => focused_window.toggleDevTools(),
+    },
+    {
+        label: 'quit',
+        accelerator: 'Alt+Q',
+        click: () => electron.app.quit(),
+    },
+    // {label: 'bookmarked'},
+    // {label: 'history'},
+    // {label: 'settings'},
+];
+
+// function to load a window
+let load_window = (html_page) => {
+    // create a new window object
+    const window = new electron.BrowserWindow({
         show: false,
+        frame: false,
+        width: 1200,
+        height: 600,
         webPreferences: {
             nodeIntegration: true
         }
     });
 
-    // make the main window *fullscreen windowed*
-    main_window.maximize();
-    main_window.show();
+    // maximize then unhide then load the specified html page *relative path*
+    // window.maximize();
+    window.show();
+    window.loadURL(path.join(__dirname, html_page));
 
-    const main_menu_template = [
-        {
-            label: 'devtools',
-            click: () => {
-                main_window.getFocusedWindow().toggleDevTools();
-            }
-        },
-        // {label: 'bookmarked'},
-        // {label: 'history'},
-        // {label: 'settings'},
-    ];
+    return window;
+};
+
+// function to swap the current main window to another html page
+let swap_window = (window, html_page) => {
+    if (!window){
+        throw `no existing window to navigate to ${html_page}`;
+    }
+
+    window.loadURL(path.join(__dirname, html_page));
+    return window;
+};
+
+// helper function to load the home window on ready
+let load_home = () => {
+    const main_window = load_window('main_window.html');
     
     const main_menu = electron.Menu.buildFromTemplate(main_menu_template);
     electron.Menu.setApplicationMenu(main_menu);
 
-    main_window.loadURL(path.join(__dirname, 'main_window.html'));
+    // closes entire application if main_window is closed
+    main_window.on('closed', () => electron.app.quit());
 
+
+    // catching the search_key/data once its submitted from the search form
+    electron.ipcMain.on('search_key', async (event, data) => {
+        const manganelo_scraper = new scrapers.manganelo_scraper();
+        await manganelo_scraper.search(data);
+        await manganelo_scraper.close_browser();
+
+        main_window = swap_window(main_window, path.join(__dirname, 'result_window.html'));
+
+        console.log(data);
+        console.log(manganelo_scraper._results);
+    });
 };
 
-electron.app.on('ready', load_main_window);
+electron.app.on('ready', load_home);
+

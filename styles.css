@@ -1,7 +1,7 @@
 /* css for the mainpage and search pages */
 
 body {
-    background-color: rgb(24, 19, 29);
+    background-color: rgb(33, 33, 36);
     color:rgb(255, 189, 136);
     margin: 0;
     padding: 0;
@@ -10,21 +10,71 @@ body {
 }
 
 .search-wrapper {
-    background: rgb(48, 37, 59);
     width: 100%;
     min-height: 100vh;
-    background-position: center;
     align-items: center;
+    justify-content: center;
+    display: flex;
+    position: absolute;
+}
+
+.search-bar {
+    width: auto;
+    height: auto;
+    position: relative;
     justify-content: center;
     display: flex;
 }
 
-.search-bar {
-    background: transparent;
-    width: 100%;
-    max-width: 700px;
-    background-position: center;
+#search {
+    width: 80vw;
+    height: 40px;
+    color:rgb(255, 255, 255);
+    background-color: rgb(255, 189, 136);
+    border-radius: 5px;
+    border: 0px;
+    font-size: 20px;
+    
+}
+
+#search:hover {
+    background-color: rgba(255, 189, 136, 0.5);
+}
+
+#search-results {
+    position: absolute;
+    top: 50px;
+}
+
+ul.navbar {
+    list-style-type: none;
+    margin: 0px;
+    padding: 0px;
+    border: 0px;
     align-items: center;
     justify-content: center;
     display: flex;
+    flex-direction: row;    
+    position: relative;
+    top: 80vh;
+}
+
+li.tab {
+    width: auto;
+    height: auto;
+
+}
+
+li.tab > img {
+    margin: 30px;
+    width: 40px;
+}
+
+li.tab > img:hover {
+    opacity: 0.5;
+}
+
+/* changing the color of placeholder text in the search box */
+::placeholder{
+    color:rgb(255, 255, 255);
 }
