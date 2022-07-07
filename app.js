@@ -32,6 +32,7 @@ let load_window = (html_page) => {
         frame: false,
         width: 1250,
         height: 700,
+        icon: './icons/mimi_reader_dp_2.png',
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,
@@ -80,18 +81,18 @@ let load_home = () => {
         main_window = swap_window(main_window, 'main_window.html');
     });
 
-    electron.ipcMain.on('minimize', (event, data) =>{
+    electron.ipcMain.on('minimize', (event, data) => {
         main_window.minimize();
     });
 
-    electron.ipcMain.on('maximize', (event, data) =>{
-        main_window.maximize();
+    electron.ipcMain.on('maximize', (event, data) => {
+        main_window.isMaximized() ? main_window.unmaximize() : main_window.maximize();
     });
 
-    electron.ipcMain.on('close', (event, data) =>{
+    electron.ipcMain.on('close', (event, data) => {
         electron.app.quit();
     });
-    
+
 };
 
 electron.app.on('ready', load_home);

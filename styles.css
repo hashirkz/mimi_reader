@@ -55,8 +55,8 @@ ul.navbar {
     border: 0px;
     display: flex;
     flex-direction: row;    
-    position: relative;
     align-items: center;
+    position: relative;
     top: 0vh;
 }
 
