@@ -56,27 +56,42 @@ let swap_window = (window, html_page) => {
     return window;
 };
 
-// helper function to load the home window on ready
+// helper/main function to load the home window on ready and handle events
 let load_home = () => {
     let main_window = load_window('main_window.html');
-    
+
     const main_menu = electron.Menu.buildFromTemplate(main_menu_template);
     electron.Menu.setApplicationMenu(main_menu);
-
+    
     // catching the search_key/data once its submitted from the search form
     electron.ipcMain.on('search_key', async (event, data) => {
+        main_window = swap_window(main_window, 'result_window.html');
+
         const manganelo_scraper = new scrapers.manganelo_scraper();
         await manganelo_scraper.search(data);
         await manganelo_scraper.close_browser();
-
-        main_window = swap_window(main_window, 'result_window.html');
 
         console.log(manganelo_scraper._results);
         console.log(data);
     });
 
-    // closes entire application if main_window is closed
-    main_window.on('closed', () => electron.app.quit());
+    // ribbon/navbar event handler receiving end
+    electron.ipcMain.on('go_home', (event, data) => {
+        main_window = swap_window(main_window, 'main_window.html');
+    });
+
+    electron.ipcMain.on('minimize', (event, data) =>{
+        main_window.minimize();
+    });
+
+    electron.ipcMain.on('maximize', (event, data) =>{
+        main_window.maximize();
+    });
+
+    electron.ipcMain.on('close', (event, data) =>{
+        electron.app.quit();
+    });
+    
 };
 
 electron.app.on('ready', load_home);

@@ -6,20 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>mimi reader</title>
     <link rel="stylesheet" href="./styles.css">
-    <script>
-        window.onload = function() {
-            const { ipcRenderer } = require('electron');
-            const search_res = document.querySelector('.search-bar');
-            search_res.addEventListener('submit', submit_form);
-
-            function submit_form(event) {
-                event.preventDefault();
-                const search_key = search_res.querySelector('#search').value;
-                search_res.reset();
-                ipcRenderer.send('search_key', search_key);
-            }
-        }
-    </script>
 </head>
 
 <body>
@@ -33,9 +19,30 @@
         <li class="tab" title="home"><img src="./icons/home.png"></li>
         <li class="tab" title="search"><img src="./icons/search.png"></li>
         <li class="tab" title="bookmarks"><img src="./icons/bookmarks.png"></li>
+        <div class="fill-remaining-space"></div>
+        <li class="tab" title="minimize"><img src="./icons/minimize.png"></li>
+        <li class="tab" title="maximize"><img src="./icons/maximize.png"></li>
+        <li class="tab" title="close"><img src="./icons/close.png"></li>
     </ul>
 
     
+    <script async>
+        {
+            // search bar event listener handler
+            const { ipcRenderer } = require('electron');
+        
+            const search_elm = document.querySelector('.search-bar');
+        
+            search_elm.onsubmit = function() {
+                event.preventDefault();
+                const search_key = document.querySelector('#search').value;
+                search_elm.reset();
+                if (search_key === '') return null;
+                ipcRenderer.send('search_key', search_key);
+            }
+        }
+    </script>
+    <script src="./utils/home.js"></script>
 </body>
 
 </html>
