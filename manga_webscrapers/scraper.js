@@ -36,7 +36,7 @@ class scraper {
 
     async goto_site(site) {
         try {
-            if (this._browser !== null){
+            if (this._browser != null){
                 const page = await this._browser.newPage()
                 await page.goto(site);
                 return page;

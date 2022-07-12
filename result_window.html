@@ -10,12 +10,11 @@
 
 <body>
     <div class="search-results-wrapper">
-        <ul class="search-result">
-        </ul>
+        <ul class="search-results"></ul>
     </div>
 
     <ul class="navbar">
-        <li class="tab" title="home"><img src="./icons/home.png"></li>
+        <li class="tab" title="nav"><img src="./icons/nav.png"></li>
         <li class="tab" title="search"><img src="./icons/search.png"></li>
         <li class="tab" title="bookmarks"><img src="./icons/bookmarks.png"></li>
         <div class="fill-remaining-space"></div>
@@ -24,7 +23,42 @@
         <li class="tab" title="close"><img src="./icons/close.png"></li>
     </ul>
     
+    <script>
+        window.onload = () => {
+            // loading results from search_key
+            const { ipcRenderer } = require('electron');
+            ipcRenderer.on('load_results', (event, data) => {
+                let result_wrapper = document.querySelector('.search-results-wrapper > ul.search-results');
+
+                // if there were no results for search_key
+                if (!data) {
+                    let p = document.createElement('p');
+                    p.innerHTML = 'no results';
+                    result_wrapper.appendChild(p);
+                }
+
+                for(let i = 0; i < data.length; i++){
+                    let {manga, link, dp} = data[i];
+                    const search_res = document.createElement('div');
+                    const img = document.createElement('img');
+                    const a = document.createElement('a');
+
+                    // setting attributes for the search_result item and its child elements
+                    [search_res.class, search_res.title] = ['search-result', manga];
+                    [img.src, img.alt] = [dp, manga];
+                    [a.href, a.innerHTML] = [link, manga];
+
+                    // appending the current search_result to the results wrapper
+                    result_wrapper.appendChild(search_res);
+                    result_wrapper.lastChild.appendChild(a);
+                    result_wrapper.lastChild.lastChild.appendChild(img);
+                }
+            });
+        }
+    </script>
     <script src="./utils/home.js"></script>
+    
+    
 </body>
 
 </html>

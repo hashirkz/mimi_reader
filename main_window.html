@@ -16,7 +16,7 @@
     </div>
 
     <ul class="navbar">
-        <li class="tab" title="home"><img src="./icons/home.png"></li>
+        <li class="tab" title="nav"><img src="./icons/nav.png"></li>
         <li class="tab" title="search"><img src="./icons/search.png"></li>
         <li class="tab" title="bookmarks"><img src="./icons/bookmarks.png"></li>
         <div class="fill-remaining-space"></div>
@@ -26,8 +26,8 @@
     </ul>
 
     
-    <script async>
-        {
+    <script>
+        window.onload = () => {
             // search bar event listener handler
             const { ipcRenderer } = require('electron');
         
