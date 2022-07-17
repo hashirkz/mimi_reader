@@ -5,12 +5,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>results</title>
-    <link rel="stylesheet" href="./styles.css">
+    <link rel="stylesheet" href="./apple_juice.css">
 </head>
 
 <body>
     <div class="search-results-wrapper">
         <ul class="search-results"></ul>
+    </div>
+
+    <div class="sidebar-wrapper">
+        <p>hi r u lost?</p>
     </div>
 
     <ul class="navbar">
@@ -22,37 +26,57 @@
         <li class="tab" title="maximize"><img src="./icons/maximize.png"></li>
         <li class="tab" title="close"><img src="./icons/close.png"></li>
     </ul>
-    
+
     <script>
-        window.onload = () => {
-            // loading results from search_key
-            const { ipcRenderer } = require('electron');
-            ipcRenderer.on('load_results', (event, data) => {
-                let result_wrapper = document.querySelector('.search-results-wrapper > ul.search-results');
+        {
+            window.addEventListener('load', () => {
 
-                // if there were no results for search_key
-                if (!data) {
-                    let p = document.createElement('p');
-                    p.innerHTML = 'no results';
-                    result_wrapper.appendChild(p);
-                }
+                // loading results from search_key
+                const { ipcRenderer } = require('electron');
+                ipcRenderer.on('load_results', (event, data) => {
+                    let result_wrapper = document.querySelector('.search-results-wrapper > ul.search-results');
 
-                for(let i = 0; i < data.length; i++){
-                    let {manga, link, dp} = data[i];
-                    const search_res = document.createElement('div');
-                    const img = document.createElement('img');
-                    const a = document.createElement('a');
+                    // if there were no results for search_key
+                    if (data === []) {
+                        const p = document.createElement('p');
+                        p.innerHTML = 'no results';
+                        result_wrapper.appendChild(p);
+                    }
 
-                    // setting attributes for the search_result item and its child elements
-                    [search_res.class, search_res.title] = ['search-result', manga];
-                    [img.src, img.alt] = [dp, manga];
-                    [a.href, a.innerHTML] = [link, manga];
+                    for(let i = 0; i < data.length; i++){
+                        let {manga, link, dp} = data[i];
+                        const search_res = document.createElement('li');
+                        const img = document.createElement('img');
+                        const p = document.createElement('p');
 
-                    // appending the current search_result to the results wrapper
-                    result_wrapper.appendChild(search_res);
-                    result_wrapper.lastChild.appendChild(a);
-                    result_wrapper.lastChild.lastChild.appendChild(img);
-                }
+                        // setting attributes for the search_result item and its child elements
+                        [search_res.className, search_res.title] = ['search-result', manga];
+                        [img.src, img.alt] = [dp, manga];
+                        [p.innerHTML] = [manga];
+                        p.setAttribute('data-link', link);
+                        p.setAttribute('data-index', i);
+
+                        // appending the current search_result to the results wrapper
+                        result_wrapper.appendChild(search_res);
+                        result_wrapper.lastChild.appendChild(p);
+                        result_wrapper.lastChild.appendChild(img);
+                    }
+
+                    // event creating event listeners for each p element
+                    let listen_chapters = () => {
+                        let ps = document.querySelectorAll('.search-results > li.search-result > p');
+                        
+                        // keeping counter for the current search result in scraper._results
+                        ps.forEach((p) => {
+                            p.parentElement.addEventListener('click', () => {
+                                let link = p.getAttribute('data-link');
+                                let index = p.getAttribute('data-index');
+                                ipcRenderer.send('get_chapters', [link, index]);
+                            }); 
+                        });
+                    }
+                    listen_chapters();
+                });
             });
         }
     </script>

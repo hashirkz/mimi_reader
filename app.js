@@ -60,6 +60,7 @@ let swap_window = async (window, html_page) => {
 // helper/main function to load the home window on ready and handle events
 let load_home = async () => {
     let main_window = await load_window('main_window.html');
+    const manganelo_scraper = new scrapers.manganelo_scraper();
 
     const main_menu = electron.Menu.buildFromTemplate(main_menu_template);
     electron.Menu.setApplicationMenu(main_menu);
@@ -68,20 +69,21 @@ let load_home = async () => {
     electron.ipcMain.on('search_key', async (event, data) => {
         main_window = await swap_window(main_window, 'result_window.html');
 
-        const manganelo_scraper = new scrapers.manganelo_scraper();
         await manganelo_scraper.search(data);
-        await manganelo_scraper.close_browser();
         
         main_window.webContents.send('load_results', manganelo_scraper._results);
-
-        // main_window.webContents.once('did-finish-load', () => {
-        //     main_window.webContents.send('load_results', manganelo_scraper._results);
-        // });
-        // console.log(manganelo_scraper._results);
-        // console.log(data);
     });
 
-    // ribbon/navbar event handler receiving end
+    // event handler to fetch and send chapter data to chapters_window.html
+    electron.ipcMain.on('get_chapters', async (event, data) => {
+        let [link, i] = data;
+        main_window = await swap_window(main_window, 'chapters_window.html');
+        await manganelo_scraper.get_chapters(link);
+
+        main_window.webContents.send('sent_chapters', [manganelo_scraper._chapters, manganelo_scraper._results[i]]);
+    });
+
+    // ribbon/navbar event listenener
     electron.ipcMain.on('go_search', async (event, data) => {
         main_window = await swap_window(main_window, 'main_window.html');
     });
@@ -95,6 +97,7 @@ let load_home = async () => {
     });
 
     electron.ipcMain.on('close', (event, data) => {
+        manganelo_scraper.close_browser();
         electron.app.quit();
     });
 

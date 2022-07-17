@@ -4,15 +4,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>mimi reader</title>
+    <title>chapters</title>
     <link rel="stylesheet" href="./apple_juice.css">
 </head>
 
 <body>
-    <div class='search-wrapper'>
-        <form class="search-bar">
-            <input id="search" type="search" placeholder="search..." spellcheck="false">
-        </form>
+    <div class="about">
+        <img class="dp" alt="display_photo">
+        <p class="about-title"></p>
+        <p class="about-description"></p>
+    </div>
+
+    <div class="chapter-wrapper">
+        <ul class="chapters"></ul>
     </div>
 
     <div class="sidebar-wrapper">
@@ -29,22 +33,18 @@
         <li class="tab" title="close"><img src="./icons/close.png"></li>
     </ul>
 
-    
     <script>
         {
-            window.addEventListener('load',  () => {
-                // search bar event listener handler
+            window.addEventListener('load', () => {
                 const { ipcRenderer } = require('electron');
-            
-                const search_elm = document.querySelector('.search-bar');
-            
-                search_elm.onsubmit = function() {
-                    event.preventDefault();
-                    const search_key = document.querySelector('#search').value;
-                    search_elm.reset();
-                    if (search_key === '') return null;
-                    ipcRenderer.send('search_key', search_key);
-                }
+                ipcRenderer.on('sent_chapters', (event, data) => {
+                    let [chapters, manga] = data
+
+                    // need to add ribbon / 
+                    // chapters.forEach((chapter, i) => {
+
+                    // });
+                })
             });
         }
     </script>

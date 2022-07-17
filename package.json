@@ -20,12 +20,12 @@
   "homepage": "https://github.com/hashirkz/mimi_reader#readme",
   "dependencies": {
     "fetch": "^1.1.0",
-    "node-fetch": "^3.2.6",
-    "puppeteer": "^14.4.1"
+    "node-fetch": "^3.2.6"
   },
   "devDependencies": {
     "animejs": "^3.2.1",
     "browserify": "^17.0.0",
-    "electron": "^19.0.7"
+    "electron": "^19.0.8",
+    "puppeteer": "^15.4.0"
   }
 }
