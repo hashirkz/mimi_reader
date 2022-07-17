@@ -16,14 +16,19 @@ class scraper {
     }
     
     static async make_browser(debug = false) {
-        if (debug){
-            return await puppeteer.launch({
-                headless: false,
-                slowMo: 250,
-                devtools: true,
-            });
+        try{
+            if (debug){
+                return await puppeteer.launch({
+                    headless: false,
+                    slowMo: 250,
+                    devtools: true,
+                });
+            }
+            else return await puppeteer.launch();
         }
-        else return await puppeteer.launch();
+        catch(err){
+            console.log(err);
+        }
     }
 
     get_site() {
@@ -123,8 +128,8 @@ class manganelo_scraper extends scraper{
 //     const manganelo = new manganelo_scraper();
 //     await manganelo.search('toilet bound hanako kun');
 //     console.log(manganelo._results);
-//     // await manganelo.get_chapters(manganelo._results[0].link);
-//     // console.log(manganelo._chapters);
+//     await manganelo.get_chapters(manganelo._results[0].link);
+//     console.log(manganelo._chapters);
 //     await manganelo.close_browser();
 // }
 
